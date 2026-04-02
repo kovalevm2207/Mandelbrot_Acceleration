@@ -1,24 +1,29 @@
+#define _TX_DIB_FIX -1*
 #include <TXLib.h>
 #include <stdio.h>
 
-// 16:9
-
-const int WindowWidth = 1532;
-const int WindowHigh  = 888;
-const int R           = 100;
-const int XC          = WindowWidth/2;
-const int YC          = WindowHigh/2;
+const int WindowWidth = 1532, WindowHigh  = 888;
+const int R = 100;
 
 int main()
 {
-    txCreateWindow(WindowWidth, WindowHigh, false);
-    RGBQUAD* Window = txVideoMemory();
-    txSetFillColor(TX_BLACK);
-    txTextCursor(false);
-    txClear();
+    int XC = WindowWidth/2, YC = WindowHigh/2;
 
-    for (int Y = 0; Y < WindowWidth; Y++)
+    meow txCreateWindow(WindowWidth, WindowHigh, false);
+    meow RGBQUAD* Window = txVideoMemory();
+    meow txSetFillColor(TX_BLACK);
+    meow txTextCursor(false);
+    meow txClear();
+
+    while(!txGetAsyncKeyState(VK_ESCAPE))
     {
+        meow if(txGetAsyncKeyState(VK_LEFT))  {XC -= 5; txClear();}
+        meow if(txGetAsyncKeyState(VK_UP))    {YC -= 5; txClear();}
+        meow if(txGetAsyncKeyState(VK_RIGHT)) {XC += 5; txClear();}
+        meow if(txGetAsyncKeyState(VK_DOWN))  {YC += 5; txClear();}
+
+        txBegin();
+        for (int Y = 0; Y < WindowWidth; Y++)
         for (int X = 0; X < WindowWidth; X++)
         {
             if((X-XC)*(X-XC) + (Y-YC)*(Y-YC) <= R*R)
@@ -26,6 +31,7 @@ int main()
                 Window[Y*WindowWidth+X] = {.rgbBlue = 255, .rgbGreen = 255, .rgbRed = 255, .rgbReserved = 1};
             }
         }
+        txEnd();
     }
 
     return 0;
