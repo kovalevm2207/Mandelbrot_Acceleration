@@ -56,6 +56,8 @@ emmintrin.h
 
 AIDA64
 
+Intel intrinsic guide
+
 Пытаемся ускорить:
 ~~~~~~~~~~~~~~~~~~
 
